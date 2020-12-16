@@ -6,13 +6,13 @@
   <!-- load the controllers -->
   <node name="wrist_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
     output="screen" ns="gazebo" 
-    args="virtual_joint_state_controller 
-    virtual_px_position_controller
-    virtual_py_position_controller
-    virtual_pz_position_controller
-    virtual_ry_position_controller
-    virtual_rp_position_controller 
-    virtual_rr_position_controller
+    args="joint_state_controller 
+    px_position_controller
+    py_position_controller
+    pz_position_controller
+    ry_position_controller
+    rp_position_controller 
+    rr_position_controller
     "/>
 
   <!-- launch finger finger_controller -->

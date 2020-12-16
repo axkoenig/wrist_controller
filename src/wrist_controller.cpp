@@ -8,7 +8,7 @@
 #include <string>
 
 std::string node_name = "wrist_control";
-std::string ns = "gazebo";
+std::string ns = "gazebo/";
 std::string topic_name = "gazebo/set_model_state";
 std::string source_frame = "world";
 std::string target_frame = "reflex";
@@ -22,7 +22,7 @@ private:
 public:
     WristAxisController(ros::NodeHandle *nh, std::string axis)
     {
-        std::string topic = ns + "/virtual_" + axis + "_position_controller/command";
+        std::string topic = ns + axis + "_position_controller/command";
         pub = nh->advertise<std_msgs::Float64>(topic, 1);
     }
 
