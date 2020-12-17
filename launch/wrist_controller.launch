@@ -1,12 +1,14 @@
 <launch>
 
-  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <!-- NOTE: this launch file brings up any components that relate to the wrist controller -->
+
+  <!-- load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find wrist_controller)/config/wrist_control.yaml" command="load"/>
 
   <!-- load the controllers -->
   <node name="wrist_controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
     output="screen" ns="gazebo" 
-    args="joint_state_controller 
+    args="wrist_joint_state_controller 
     px_position_controller
     py_position_controller
     pz_position_controller
@@ -15,7 +17,7 @@
     rr_position_controller
     "/>
 
-  <!-- launch finger finger_controller -->
+  <!-- launch wrist controller node -->
   <node pkg="wrist_controller" type="wrist_controller_node" name="wrist_controller_node" respawn="true" output="screen"/>
 
 </launch>
