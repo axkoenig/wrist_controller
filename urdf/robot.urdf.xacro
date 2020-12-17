@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- name of base link of your robotic hand -->
+    <xacro:arg name="base_link_name" default="base_link"/>
+
+    <!-- this is a dummy link -->
+    <xacro:property name="dummy_box_size" value="0.1"/>
+    <xacro:property name="dummy_box_mass" value="0.1"/>
+    <xacro:property name="dummy_box_inerta" value="0.1"/>
+
+    <link name="$(arg base_link_name)">
+        <visual>
+            <origin xyz="0 0 ${dummy_box_size/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${dummy_box_size} ${dummy_box_size} ${dummy_box_size}"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0 0 ${dummy_box_size/2}" rpy="0 0 0" />
+            <geometry>
+                <box size="${dummy_box_size} ${dummy_box_size} ${dummy_box_size}"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0 0 ${dummy_box_size/2}" rpy="0 0 0" />
+            <mass value="${dummy_box_mass}"/>
+            <inertia ixx="${dummy_box_inerta}" ixy="0" ixz="0" iyy="${dummy_box_inerta}" iyz="0" izz="${dummy_box_inerta}"/>
+        </inertial>
+    </link>
+
+</robot>
