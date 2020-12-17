@@ -1,0 +1,31 @@
+<launch>
+
+    <!-- NOTE: this is the main launch file of your robot, it loads the URDF, starts Gazebo and starts the wrist controller -->
+
+    <!-- EDIT: change this to the name of the base link of your robotic hand -->
+    <arg name="base_link_name" default="base_link" />
+
+    <!-- load robot_name to parameter server (this is your tf target frame in world coordinates) -->
+    <arg name="robot_name" default="robotic_hand" />
+    <param name="robot_name" value="$(arg robot_name)" />
+
+    <!-- launch empty gazebo world -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="debug" value="false" />
+        <arg name="gui" value="true" />
+        <arg name="paused" value="false" />
+        <arg name="physics" value="dart" />
+        <arg name="verbose" value="true" />
+    </include>
+
+    <!-- load robot description -->
+    <param name="robot_description" command="
+    $(find xacro)/xacro '$(find wrist_controller)/urdf/robot.xacro' base_link_name:=$(arg base_link_name) only_reflex:=true"/>
+
+    <!-- spawn robot in gazebo -->
+    <node name="spawner" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model robot" />
+
+    <!-- launch wrist controller-->
+    <include file="$(find wrist_controller)/launch/wrist_controller.launch" />
+
+</launch>
