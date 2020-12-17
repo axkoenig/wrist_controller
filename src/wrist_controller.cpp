@@ -1,44 +1,57 @@
+#include <string.h>
+
 #include <ros/ros.h>
-#include <gazebo_msgs/ModelState.h>
-#include <tf2_ros/transform_listener.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <std_msgs/Float64.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Matrix3x3.h>
-#include <string>
+#include <tf2_ros/transform_listener.h>
 
-std::string node_name = "wrist_control_node";
-std::string ns = "gazebo/";
-std::string source_frame = "world";
+using namespace std;
+
+const string NODE_NAME = "wrist_control_node";
+const string NS = "gazebo/";
+const string source_frame = "world";
 
 class WristAxisController
 {
 private:
-    ros::Publisher pub;
-    std_msgs::Float64 msg;
+    ros::Publisher pub_;
+    std_msgs::Float64 msg_;
 
 public:
-    WristAxisController(ros::NodeHandle *nh, std::string axis)
+    WristAxisController(ros::NodeHandle *nh, string axis)
     {
-        std::string topic = ns + axis + "_position_controller/command";
-        pub = nh->advertise<std_msgs::Float64>(topic, 1);
+        pub_ = nh->advertise<std_msgs::Float64>(NS + axis + "_position_controller/command", 1);
     }
 
     void sendCommand(float command)
     {
-        msg.data = command;
-        pub.publish(msg);
+        msg_.data = command;
+        pub_.publish(msg_);
     }
 };
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, node_name);
+    ros::init(argc, argv, NODE_NAME);
     ros::NodeHandle nh;
-    ROS_INFO("Launched %s node.", node_name.c_str());
+    ROS_INFO("Launched %s.", NODE_NAME.c_str());
 
-    std::string target_frame;
-    std::string desired_param = "robot_name";
+    ros::Rate rate(1000);
+    tf2_ros::Buffer tfBuffer;
+    tf2_ros::TransformListener tfListener(tfBuffer);
+    geometry_msgs::TransformStamped ts;
+
+    WristAxisController px_controller = WristAxisController(&nh, "px");
+    WristAxisController py_controller = WristAxisController(&nh, "py");
+    WristAxisController pz_controller = WristAxisController(&nh, "pz");
+    WristAxisController rr_controller = WristAxisController(&nh, "rr");
+    WristAxisController rp_controller = WristAxisController(&nh, "rp");
+    WristAxisController ry_controller = WristAxisController(&nh, "ry");
+
+    string target_frame;
+    string desired_param = "robot_name";
 
     // wait for robot_name on parameter server
     while (ros::ok())
@@ -55,18 +68,6 @@ int main(int argc, char **argv)
             ros::Duration(1.0).sleep();
         }
     }
-
-    ros::Rate rate(1000);
-    tf2_ros::Buffer tfBuffer;
-    tf2_ros::TransformListener tfListener(tfBuffer);
-    geometry_msgs::TransformStamped ts;
-
-    WristAxisController px_controller = WristAxisController(&nh, "px");
-    WristAxisController py_controller = WristAxisController(&nh, "py");
-    WristAxisController pz_controller = WristAxisController(&nh, "pz");
-    WristAxisController rr_controller = WristAxisController(&nh, "rr");
-    WristAxisController rp_controller = WristAxisController(&nh, "rp");
-    WristAxisController ry_controller = WristAxisController(&nh, "ry");
 
     while (ros::ok())
     {
