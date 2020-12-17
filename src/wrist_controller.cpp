@@ -7,11 +7,9 @@
 #include <tf2/LinearMath/Matrix3x3.h>
 #include <string>
 
-std::string node_name = "wrist_control";
+std::string node_name = "wrist_control_node";
 std::string ns = "gazebo/";
-std::string topic_name = "gazebo/set_model_state";
 std::string source_frame = "world";
-std::string target_frame = "reflex";
 
 class WristAxisController
 {
@@ -37,8 +35,26 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, node_name);
     ros::NodeHandle nh;
-    ros::Publisher pub = nh.advertise<gazebo_msgs::ModelState>(topic_name, 1);
     ROS_INFO("Launched %s node.", node_name.c_str());
+
+    std::string target_frame;
+    std::string desired_param = "robot_name";
+
+    // wait for robot_name on parameter server
+    while (ros::ok())
+    {
+        if (nh.hasParam(desired_param))
+        {
+            nh.getParam(desired_param, target_frame);
+            ROS_INFO("Obtained robot_name: '%s' from parameter server.", target_frame.c_str());
+            break;
+        }
+        else
+        {
+            ROS_WARN("Could not find parameter '%s' on parameter server.", desired_param.c_str());
+            ros::Duration(1.0).sleep();
+        }
+    }
 
     ros::Rate rate(1000);
     tf2_ros::Buffer tfBuffer;
