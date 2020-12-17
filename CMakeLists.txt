@@ -13,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf2_ros
   tf2
+  controller_manager
+  joint_state_controller
 )
 
 ## System dependencies are found with CMake's conventions
