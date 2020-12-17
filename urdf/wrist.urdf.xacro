@@ -1,6 +1,9 @@
 <?xml version="1.0" ?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="reflex">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+    <!-- name of base link of your robotic hand -->
+    <xacro:arg name="base_link_name" default="base_link"/>
+    
     <!-- translation properties -->
     <xacro:property name="translation_effort" value="1000"/>
     <xacro:property name="translation_velocity" value="0.5"/>
@@ -15,6 +18,15 @@
     <xacro:property name="rotation_damping" value="60"/>
     <xacro:property name="rotation_friction" value="0"/>
 
+    <!-- link properties -->
+    <xacro:property name="mass" value="1"/>
+    <xacro:property name="ixx" value="0.01"/>
+    <xacro:property name="ixy" value="0"/>
+    <xacro:property name="ixz" value="0"/>
+    <xacro:property name="iyy" value="0.01"/>
+    <xacro:property name="iyz" value="0"/>
+    <xacro:property name="izz" value="0.01"/>
+
     <!-- links and joints for translation -->
     <link name="world"/>
     <joint name="px_joint" type="prismatic">
@@ -28,8 +40,8 @@
     <link name="px_link">
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
-            <mass value="1"/>
-            <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+            <mass value="${mass}"/>
+            <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}"/>
         </inertial>
     </link>
     <joint name="py_joint" type="prismatic">
@@ -43,8 +55,8 @@
     <link name="py_link">
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
-            <mass value="1"/>
-            <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+            <mass value="${mass}"/>
+            <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}"/>
         </inertial>
     </link>
     <joint name="pz_joint" type="prismatic">
@@ -58,8 +70,8 @@
     <link name="pz_link">
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
-            <mass value="1"/>
-            <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+            <mass value="${mass}"/>
+            <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}"/>
         </inertial>
     </link>
 
@@ -75,8 +87,8 @@
     <link name="ry_link">
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
-            <mass value="1"/>
-            <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+            <mass value="${mass}"/>
+            <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}"/>
         </inertial>
     </link>
     <joint name="rp_joint" type="continuous">
@@ -90,17 +102,16 @@
     <link name="rp_link">
         <inertial>
             <origin rpy="0 0 0" xyz="0 0 0"/>
-            <mass value="1"/>
-            <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+            <mass value="${mass}"/>
+            <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}"/>
         </inertial>
     </link>
 
-    <!-- if you want to use this package with other robot hands, simply replace the "shell" link with the base link of your robot hand -->
     <joint name="rr_joint" type="continuous">
         <origin rpy="0 0 0" xyz="0 0 0"/>
         <axis xyz="1 0 0"/>
         <parent link="rp_link"/>
-        <child link="shell"/>
+        <child link="$(arg base_link_name)"/>
         <limit effort="${rotation_effort}" velocity="${rotation_velocity}"/>
         <dynamics damping="${rotation_damping}" friction="${rotation_friction}"/>
     </joint>
