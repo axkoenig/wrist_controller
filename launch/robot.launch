@@ -20,7 +20,7 @@
 
     <!-- load robot description -->
     <param name="robot_description" command="
-    $(find xacro)/xacro '$(find wrist_controller)/urdf/robot.xacro' base_link_name:=$(arg base_link_name) only_reflex:=true"/>
+    $(find xacro)/xacro '$(find wrist_controller)/urdf/robot.xacro' base_link_name:=$(arg base_link_name)"/>
 
     <!-- spawn robot in gazebo -->
     <node name="spawner" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model robot" />
