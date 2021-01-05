@@ -59,7 +59,7 @@ int main(int argc, char **argv)
         if (nh.hasParam(desired_param))
         {
             nh.getParam(desired_param, target_frame);
-            ROS_INFO("Obtained robot_name: '%s' from parameter server.", target_frame.c_str());
+            ROS_INFO("Obtained %s: '%s' from parameter server.", desired_param.c_str(), target_frame.c_str());
             break;
         }
         else
