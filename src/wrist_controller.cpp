@@ -56,9 +56,8 @@ int main(int argc, char **argv)
     // wait for robot_name on parameter server
     while (ros::ok())
     {
-        if (nh.hasParam(desired_param))
+        if (nh.getParam(desired_param, target_frame))
         {
-            nh.getParam(desired_param, target_frame);
             ROS_INFO("Obtained %s: '%s' from parameter server.", desired_param.c_str(), target_frame.c_str());
             break;
         }
