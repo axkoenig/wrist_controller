@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   tf2_ros
   tf2
+  tf2_geometry_msgs
   controller_manager
   joint_state_controller
 )
@@ -120,7 +121,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -139,6 +140,7 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/wrist_controller_node.cpp)
 add_executable(${PROJECT_NAME}_node src/wrist_controller.cpp)
+add_executable(wrist_teleop_node src/keyboard_teleop.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -152,6 +154,9 @@ add_executable(${PROJECT_NAME}_node src/wrist_controller.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(wrist_teleop_node
   ${catkin_LIBRARIES}
 )
 
