@@ -7,6 +7,8 @@
 #include <tf2/LinearMath/Matrix3x3.h>
 #include <tf2_ros/transform_listener.h>
 
+#include "helpers.hpp"
+
 using namespace std;
 
 const string NODE_NAME = "wrist_control_node";
@@ -50,23 +52,8 @@ int main(int argc, char **argv)
     WristAxisController rp_controller = WristAxisController(&nh, "rp");
     WristAxisController ry_controller = WristAxisController(&nh, "ry");
 
-    string target_frame;
-    string desired_param = "robot_name";
-
-    // wait for robot_name on parameter server
-    while (ros::ok())
-    {
-        if (nh.getParam(desired_param, target_frame))
-        {
-            ROS_INFO("Obtained %s: '%s' from parameter server.", desired_param.c_str(), target_frame.c_str());
-            break;
-        }
-        else
-        {
-            ROS_WARN("Could not find parameter '%s' on parameter server.", desired_param.c_str());
-            ros::Duration(1.0).sleep();
-        }
-    }
+    std::string target_frame;
+    getParam(&nh, &target_frame, "robot_name");
 
     while (ros::ok())
     {
