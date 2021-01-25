@@ -4,7 +4,8 @@
 
     <!-- EDIT: change this to the name of the base link of your robotic hand -->
     <arg name="base_link_name" default="base_link" />
-
+    <arg name="run_wrist_teleop_node" default="false" />
+    
     <!-- load robot_name to parameter server (this is your tf target frame in world coordinates) -->
     <arg name="robot_name" default="robotic_hand" />
     <param name="robot_name" value="$(arg robot_name)" />
@@ -23,9 +24,11 @@
     $(find xacro)/xacro '$(find wrist_controller)/urdf/robot.xacro' base_link_name:=$(arg base_link_name)"/>
 
     <!-- spawn robot in gazebo -->
-    <node name="spawner" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model robot" />
+    <node name="spawner" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model $(arg robot_name)" />
 
     <!-- launch wrist controller-->
     <include file="$(find wrist_controller)/launch/wrist_controller.launch" />
 
+    <!-- launch keyboard teleoperation node -->
+    <node name="wrist_teleop_node" pkg="wrist_controller" type="wrist_teleop_node" if="$(eval run_wrist_teleop_node == 'true')"/>
 </launch>
