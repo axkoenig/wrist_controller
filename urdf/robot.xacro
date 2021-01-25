@@ -3,7 +3,6 @@
 
     <!-- load URDF of wrist controller -->
     <xacro:include filename="$(find wrist_controller)/urdf/wrist.urdf.xacro"/>
-    <xacro:include filename="$(find wrist_controller)/urdf/wrist.gazebo.xacro"/>
 
     <!-- EDIT: add your robot starting from the link "base_link_name" that you specified in robot.launch -->
     <xacro:include filename="$(find wrist_controller)/urdf/robot.urdf.xacro"/>

@@ -118,5 +118,6 @@
 
     <!-- transmissions -->
     <xacro:include filename="$(find wrist_controller)/urdf/wrist.transmissions.xacro"/>
+    <xacro:include filename="$(find wrist_controller)/urdf/wrist.gazebo.xacro"/>
 
 </robot>
