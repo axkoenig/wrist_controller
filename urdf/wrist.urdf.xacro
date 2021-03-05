@@ -9,7 +9,7 @@
     <xacro:property name="translation_velocity" value="0.05"/>
     <xacro:property name="translation_up_lim" value="5"/>
     <xacro:property name="translation_low_lim" value="-5"/>
-    <xacro:property name="translation_low_lim_z" value="0"/>
+    <xacro:property name="translation_low_lim_z" value="-1"/>
     <xacro:property name="translation_damping" value="60"/>
     <xacro:property name="translation_friction" value="0"/>
 
