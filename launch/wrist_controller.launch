@@ -2,9 +2,16 @@
 
   <!-- NOTE: this launch file brings up any components that relate to the wrist controller -->
   <arg name="spawn_delay" default="0" />
+  <!-- sometimes we may only want to spawn the controllers (e.g. when you are respawning them and the description is already on the parameter server) -->
+  <arg name="only_spawn" default="false" /> 
 
-  <!-- load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find wrist_controller)/config/wrist_control.yaml" command="load"/>
+  <group if="$(eval not only_spawn)">
+    <!-- load joint controller configurations from YAML file to parameter server -->
+    <rosparam file="$(find wrist_controller)/config/wrist_control.yaml" command="load"/>
+
+    <!-- launch wrist controller node -->
+    <node pkg="wrist_controller" type="wrist_controller_node" name="wrist_controller_node" respawn="true" output="screen" launch-prefix="bash -c 'sleep $(arg spawn_delay); $0 $@' "/>
+  </group>
 
   <!-- load the controllers -->
   <node name="wrist_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="gazebo" launch-prefix="bash -c 'sleep $(arg spawn_delay); $0 $@' " args="wrist_joint_state_controller 
@@ -15,8 +22,5 @@
     rp_position_controller 
     rr_position_controller
     " />
-
-  <!-- launch wrist controller node -->
-  <node pkg="wrist_controller" type="wrist_controller_node" name="wrist_controller_node" respawn="true" output="screen" launch-prefix="bash -c 'sleep $(arg spawn_delay); $0 $@' "/>
 
 </launch>
