@@ -4,17 +4,18 @@
   <arg name="spawn_delay" default="0" />
   <!-- sometimes we may only want to spawn the controllers (e.g. when you are respawning them and the description is already on the parameter server) -->
   <arg name="only_spawn" default="false" /> 
+  <arg name="output" default="screen" /> 
 
   <group if="$(eval not only_spawn)">
     <!-- load joint controller configurations from YAML file to parameter server -->
     <rosparam file="$(find wrist_controller)/config/wrist_control.yaml" command="load"/>
 
     <!-- launch wrist controller node -->
-    <node pkg="wrist_controller" type="wrist_controller_node" name="wrist_controller_node" respawn="true" output="screen" launch-prefix="bash -c 'sleep $(arg spawn_delay); $0 $@' "/>
+    <node pkg="wrist_controller" type="wrist_controller_node" name="wrist_controller_node" respawn="true" output="$(arg output)" launch-prefix="bash -c 'sleep $(arg spawn_delay); $0 $@' "/>
   </group>
 
   <!-- load the controllers -->
-  <node name="wrist_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="gazebo" launch-prefix="bash -c 'sleep $(arg spawn_delay); $0 $@' " args="wrist_joint_state_controller 
+  <node name="wrist_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="$(arg output)" ns="gazebo" launch-prefix="bash -c 'sleep $(arg spawn_delay); $0 $@' " args="wrist_joint_state_controller 
     px_position_controller
     py_position_controller
     pz_position_controller
